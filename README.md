@@ -55,39 +55,50 @@ analysis.
               │
               ▼
            TABLEAU
+```
 
-
+---
 
 ## Data Sources
 
 The platform integrates data from four primary sources:
 
-PostgreSQL — structured operational fleet data
-CSV Files — fleet and transportation operational data
-Azure Storage — additional fleet-related data
-Weather API — external weather data used to enrich fleet analysis
+- **PostgreSQL** — structured operational fleet data
+- **CSV Files** — fleet and transportation operational data
+- **Azure Storage** — additional fleet-related data
+- **Weather API** — external weather data used to enrich fleet analysis
 
+---
 
-Data Ingestion
+## Data Ingestion
 
 Python-based ingestion pipelines are used to extract data from the different
 source systems and load it into Snowflake.
 
 The ingestion layer is organized into separate modules:
+
+```text
 ingestion/
 ├── api/
 ├── csv/
 ├── postgres/
 └── utils/
+```
+
 The ingestion layer supports multiple source types while keeping the
 source-specific ingestion logic separated and modular.
 
-Airflow Orchestration
+---
+
+## Airflow Orchestration
 
 Apache Airflow is used to orchestrate the ingestion workflows.
 
 The main DAG is:
+
+```text
 fleet_pipeline
+```
 
 The DAG coordinates ingestion tasks for PostgreSQL, CSV sources, and the
 weather API.
@@ -96,6 +107,8 @@ Each ingestion task receives a pipeline run ID and task name to support
 pipeline traceability and debugging.
 
 The general ingestion flow is:
+
+```text
 PostgreSQL
      │
      ├── Customers
@@ -121,12 +134,17 @@ Weather API
      │
      ▼
 Snowflake
+```
 
-Snowflake Data Warehouse
+---
+
+## Snowflake Data Warehouse
 
 Snowflake is used as the centralized data warehouse.
 
 The warehouse follows a layered architecture:
+
+```text
 RAW
   ↓
 STAGING
@@ -134,37 +152,43 @@ STAGING
 INTERMEDIATE
   ↓
 MARTS
+```
 
-RAW
+### RAW
 
 The Raw layer contains data loaded from the source systems with minimal
 transformation.
 
-STAGING
+### STAGING
 
 The Staging layer applies initial cleaning, standardization, and
 source-specific transformations.
 
-INTERMEDIATE
+### INTERMEDIATE
 
 The Intermediate layer contains transformation logic used to prepare data
 for the final analytical models.
 
-MARTS
+### MARTS
 
 The Marts layer contains curated analytical models designed for reporting
 and business analysis.
 
-dbt Transformation & Testing
+---
+
+## dbt Transformation & Testing
 
 dbt is used to manage SQL transformations within Snowflake.
 
 The dbt project follows the layered warehouse architecture:
+
+```text
 STAGING
    ↓
 INTERMEDIATE
    ↓
 MARTS
+```
 
 Staging and Intermediate models are materialized as views, while the Marts
 layer contains curated analytical tables.
@@ -173,6 +197,7 @@ The dbt project also includes automated data quality tests.
 
 The project structure includes:
 
+```text
 fleet_transformations/
 ├── models/
 │   ├── staging/
@@ -182,8 +207,11 @@ fleet_transformations/
 ├── macros/
 ├── seeds/
 └── snapshots/
+```
 
-Incremental Loading & Metadata
+---
+
+## Incremental Loading & Metadata
 
 The platform uses incremental loading to avoid unnecessarily reprocessing
 data that has already been ingested.
@@ -196,14 +224,16 @@ already been processed.
 
 These mechanisms support:
 
-Incremental ingestion
-Duplicate processing prevention
-Pipeline traceability
-Debugging
-Data lineage
-Operational visibility
+- Incremental ingestion
+- Duplicate processing prevention
+- Pipeline traceability
+- Debugging
+- Data lineage
+- Operational visibility
 
-Data Quality
+---
+
+## Data Quality
 
 Data quality is handled through dbt tests.
 
@@ -212,26 +242,35 @@ identify invalid or inconsistent records.
 
 The dbt tests are also executed automatically through the CI pipeline.
 
-Continuous Integration
+---
+
+## Continuous Integration
 
 GitHub Actions is used to automatically validate the data platform on every
-push to the main branch and on pull requests.
+push to the `main` branch and on pull requests.
 
 The CI pipeline validates the three main components of the platform.
 
-Python Ingestion
-Installs the project's Python dependencies
-Compiles the ingestion modules to detect Python syntax errors
+### Python Ingestion
 
-Airflow
-Installs Apache Airflow
-Validates the Airflow DAG for Python syntax errors
-dbt
-Installs dbt Core and the Snowflake adapter
-Creates a temporary Snowflake profile using GitHub Secrets
-Runs dbt parse to validate the dbt project
-Runs dbt test to validate data quality
+- Installs the project's Python dependencies
+- Compiles the ingestion modules to detect Python syntax errors
 
+### Airflow
+
+- Installs Apache Airflow
+- Validates the Airflow DAG for Python syntax errors
+
+### dbt
+
+- Installs dbt Core and the Snowflake adapter
+- Creates a temporary Snowflake profile using GitHub Secrets
+- Runs `dbt parse` to validate the dbt project
+- Runs `dbt test` to validate data quality
+
+### CI Pipeline
+
+```text
 Git Push / Pull Request
           │
           ▼
@@ -249,9 +288,11 @@ Git Push / Pull Request
     └─────┼─────┘
           ▼
        CI PASS
+```
 
+---
 
- ## Tableau Analytics
+## Tableau Analytics
 
 The curated data from the Snowflake Marts layer is consumed through Tableau
 for fleet transportation analytics.
@@ -259,37 +300,44 @@ for fleet transportation analytics.
 The dashboard provides an overview of fleet operations, including metrics
 such as:
 
-Total trips
-Total distance
-Fuel consumption
-Average MPG
-Trips by month
-On-time performance
-Trips by origin state
-Trailer distribution
-Monthly fleet performance
+- Total trips
+- Total distance
+- Fuel consumption
+- Average MPG
+- Trips by month
+- On-time performance
+- Trips by origin state
+- Trailer distribution
+- Monthly fleet performance
 
 ### Dashboard Preview
-![Fleet Transportation Dashboard](images/fleet_dashboard.png)
 
+![Fleet Transportation Dashboard](images/fleet_dashboard.png)
 
 Additional analytical views are being developed for driver and customer
 performance analysis.
 
-| Layer           | Technology                                  |
-| --------------- | ------------------------------------------- |
-| Programming     | Python                                      |
-| Source Systems  | PostgreSQL, CSV, Azure Storage, Weather API |
-| Orchestration   | Apache Airflow                              |
-| Data Warehouse  | Snowflake                                   |
-| Transformation  | dbt                                         |
-| Data Quality    | dbt Tests                                   |
-| CI              | GitHub Actions                              |
-| Analytics       | Tableau                                     |
-| Version Control | Git / GitHub                                |
+---
 
+## Technology Stack
 
+| Layer | Technology |
+|---|---|
+| Programming | Python |
+| Source Systems | PostgreSQL, CSV, Azure Storage, Weather API |
+| Orchestration | Apache Airflow |
+| Data Warehouse | Snowflake |
+| Transformation | dbt |
+| Data Quality | dbt Tests |
+| CI | GitHub Actions |
+| Analytics | Tableau |
+| Version Control | Git / GitHub |
 
+---
+
+## Project Structure
+
+```text
 snowflake-data-platform/
 │
 ├── .github/
@@ -323,7 +371,40 @@ snowflake-data-platform/
 │   ├── snapshots/
 │   └── dbt_project.yml
 │
+├── images/
+│   └── fleet_dashboard.png
+│
 ├── README.md
 └── requirements.txt
+```
 
+---
 
+## Engineering Practices
+
+The project applies modern data engineering practices, including:
+
+- Modular Python ingestion
+- Multi-source data integration
+- Apache Airflow orchestration
+- Layered Snowflake data warehouse architecture
+- Incremental data loading
+- Metadata tracking
+- Processed-file tracking
+- dbt transformations
+- Automated data quality testing
+- Git version control
+- GitHub Actions continuous integration
+
+---
+
+## Future Improvements
+
+Potential future improvements include:
+
+- Integrating dbt execution directly into the Airflow DAG
+- Adding automated pipeline alerts and notifications
+- Expanding pipeline monitoring and observability
+- Extending Tableau analytics for driver and customer performance
+- Further optimizing incremental processing
+- Expanding automated data quality validation
