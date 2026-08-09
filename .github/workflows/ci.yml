@@ -27,6 +27,33 @@ jobs:
           python -m pip install --upgrade pip
           pip install dbt-core==1.12.0 dbt-snowflake==1.12.0
 
+      - name: Create dbt profile
+        working-directory: fleet_transformations
+        env:
+          SNOWFLAKE_PRIVATE_KEY: ${{ secrets.SNOWFLAKE_PRIVATE_KEY }}
+          SNOWFLAKE_PRIVATE_KEY_PASSPHRASE: ${{ secrets.SNOWFLAKE_PRIVATE_KEY_PASSPHRASE }}
+        run: |
+          mkdir -p ~/.dbt
+
+          cat > ~/.dbt/profiles.yml <<EOF
+          fleet_transformations:
+            target: dev
+            outputs:
+              dev:
+                type: snowflake
+                account: ${{ secrets.SNOWFLAKE_ACCOUNT }}
+                user: ${{ secrets.SNOWFLAKE_USER }}
+                authenticator: snowflake_jwt
+                private_key: |
+                  ${SNOWFLAKE_PRIVATE_KEY}
+                private_key_passphrase: ${SNOWFLAKE_PRIVATE_KEY_PASSPHRASE}
+                role: ${{ secrets.SNOWFLAKE_ROLE }}
+                warehouse: ${{ secrets.SNOWFLAKE_WAREHOUSE }}
+                database: ${{ secrets.SNOWFLAKE_DATABASE }}
+                schema: ${{ secrets.SNOWFLAKE_SCHEMA }}
+                threads: 1
+          EOF
+
       - name: Validate dbt project
         working-directory: fleet_transformations
         run: dbt parse
