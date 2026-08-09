@@ -54,5 +54,17 @@ Potential future improvements include:
 - Integrating dbt execution into the Airflow DAG
 - Adding pipeline alerts
 - Expanding monitoring and observability
-- Implementing CI/CD
 - Improving automated data quality reporting
+
+## Continuous Integration
+
+GitHub Actions was selected to automate validation of the data platform
+whenever changes are pushed to the main branch or submitted through a pull
+request.
+
+The CI workflow validates Python ingestion code, the Airflow DAG, and the
+dbt project.
+
+This provides an automated quality gate during development and helps catch
+syntax, configuration, and data-quality issues before changes are
+incorporated into the main codebase.

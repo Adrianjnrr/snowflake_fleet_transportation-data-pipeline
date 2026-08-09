@@ -251,7 +251,7 @@ Git Push / Pull Request
        CI PASS
 
 
-       Tableau Analytics
+ ## Tableau Analytics
 
 The curated data from the Snowflake Marts layer is consumed through Tableau
 for fleet transportation analytics.
@@ -268,6 +268,11 @@ On-time performance
 Trips by origin state
 Trailer distribution
 Monthly fleet performance
+
+### Dashboard Preview
+
+![Fleet Transportation Dashboard](images/fleet-dashboard.png)
+
 
 Additional analytical views are being developed for driver and customer
 performance analysis.
