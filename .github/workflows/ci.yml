@@ -57,3 +57,8 @@ jobs:
       - name: Validate dbt project
         working-directory: fleet_transformations
         run: dbt parse
+        
+      - name: Run dbt tests
+        working-directory: fleet_transformations
+        run: dbt test
+
