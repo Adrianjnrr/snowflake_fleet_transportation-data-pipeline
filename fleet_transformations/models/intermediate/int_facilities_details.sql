@@ -1,4 +1,5 @@
 select f.facility_id,
+t.trip_id,
 f.facility_name,
 f.facility_type,
 f.city,
@@ -24,6 +25,8 @@ w.relative_humidity
 from {{ ref('stg_facilities_clean') }} f
 left join {{ ref('stg_delivery_events_clean') }} d
 on f.facility_id = d.facility_id
+left join {{ ref('stg_trips_clean') }} t
+on d.trip_id = t.trip_id
 left join {{ ref('stg_weather_clean') }} w
 on f.facility_id = w.facility_id
 and date_trunc('hour', d.actual_datetime) = date_trunc('hour', w.weather_time)

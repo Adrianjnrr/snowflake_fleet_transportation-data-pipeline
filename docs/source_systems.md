@@ -1,70 +1,41 @@
-# GreenLogix Source Systems
+# Source Systems
 
-## Project Overview
+The Fleet Transportation Data Platform integrates data from four primary
+sources.
 
-GreenLogix is a logistics company that delivers freight across the United States.
+## 1. PostgreSQL
 
-The purpose of this project is to build a modern data warehouse in Snowflake by integrating data from multiple operational source systems.
+PostgreSQL is used as a structured operational data source.
 
----
+Data is extracted from PostgreSQL using Python ingestion scripts and loaded
+into Snowflake.
 
-## Source Systems
+## 2. CSV Files
 
-### 1. Warehouse Management System (PostgreSQL)
+CSV files provide transportation and operational datasets that are ingested
+through Python-based ingestion scripts.
 
-Purpose:
-Manages customer orders and warehouse operations.
+These files contain operational information used throughout the analytical
+pipeline.
 
-Technology:
-PostgreSQL (Neon)
+## 3. Azure Storage
 
-Tables:
-- customers
-- loads
-- routes
-- facilities
+Azure Storage is used as an additional data source for fleet-related data.
 
----
+The ingestion layer retrieves the required data and loads it into the
+Snowflake platform.
 
-### 2. Fleet Management System (CSV Files)
+## 4. Weather API
 
-Purpose:
-Stores fleet assets and driver information.
+Weather data is retrieved from an external weather API.
 
-Technology:
-CSV Files
+The API data is ingested using Python and incorporated into the warehouse
+alongside transportation data.
 
-Files:
-- drivers.csv
-- trucks.csv
-- trailers.csv
-- trips.csv
-- fuel_purchases.csv
-- maintenance_records.csv
-- safety_incidents.csv
+## Source Flow
 
----
-
-### 3. GPS Provider
-
-Purpose:
-Provides live GPS tracking information.
-
-Technology:
-REST JSON API
-
-Status:
-To be implemented
-
----
-
-### 4. Sustainability System
-
-Purpose:
-Stores environmental reporting information.
-
-Technology:
-SQL Server
-
-Status:
-To be implemented
+```text
+PostgreSQL ──────┐
+CSV Files ───────┤
+Azure Storage ───┼──► Python Ingestion ──► Snowflake
+Weather API ─────┘

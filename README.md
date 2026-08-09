@@ -1,24 +1,43 @@
-# Snowflake Data Platform
+# Fleet Transportation Data Platform
 
-An end-to-end ELT data engineering project built with:
+## Project Overview
 
-- Snowflake
-- Snowpark for Python
-- DBT
-- PostgreSQL
-- Python
-- Power BI
+This project is an end-to-end data engineering platform designed to ingest,
+transform, validate, and serve fleet transportation data for analytics.
+
+The platform integrates data from multiple sources, including PostgreSQL,
+CSV files, Azure Storage, and a weather API.
+
+The data is ingested using Python-based ingestion pipelines and orchestrated
+with Apache Airflow before being transformed in Snowflake using dbt.
+
+The final curated data is consumed through Tableau dashboards for
+fleet operations analysis.
 
 ## Architecture
 
-CSV / PostgreSQL
-        ↓
+```text
+PostgreSQL
+CSV Files
+Azure Storage
+Weather API
+      │
+      ▼
 Python Ingestion
-        ↓
-Snowflake STAGING
-        ↓
-Transform
-        ↓
-Star Schema
-        ↓
-Power BI
+      │
+      ▼
+Apache Airflow
+      │
+      ▼
+Snowflake
+      │
+      ├── RAW
+      │
+      ├── STAGING
+      │
+      ├── INTERMEDIATE
+      │
+      └── MARTS
+             │
+             ▼
+          Tableau

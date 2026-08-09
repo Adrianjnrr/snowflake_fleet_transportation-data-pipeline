@@ -31,7 +31,8 @@ select t.trip_id,
             on t.trailer_id = trl.trailer_id
         left join {{ ref('stg_loads_clean') }} l
             on t.load_id = l.load_id
-        
+
+      
        
 
 

@@ -1,5 +1,6 @@
 select 
 facility_id,
+trip_id,
 event_id,
 detention_minutes,
 on_time_flag,
