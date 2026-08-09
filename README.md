@@ -271,7 +271,7 @@ Monthly fleet performance
 
 ### Dashboard Preview
 
-![Fleet Transportation Dashboard](images/fleet-dashboard.png)
+![Fleet Transportation Dashboard](images/fleet_dashboard.png)
 
 
 Additional analytical views are being developed for driver and customer
