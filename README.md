@@ -270,7 +270,6 @@ Trailer distribution
 Monthly fleet performance
 
 ### Dashboard Preview
-
 ![Fleet Transportation Dashboard](images/fleet_dashboard.png)
 
 
